@@ -31,6 +31,7 @@ jobs:
       - name: get latest tag
         id: get_latest_tag
         run: | # Unit test failed at my local machine: "git rev-list --tags --max-count=1" is null
+          git fetch --tags
           latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
           echo "::set-output name=LATEST_TAG::${latest_tag}"
       - name: set version # manually
