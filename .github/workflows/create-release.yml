@@ -71,34 +71,12 @@ jobs:
       - name: read changelog content
         id: read_changelog
         run: |
-          pre_release="${{ steps.determine_pre_release.outputs.PRE_RELEASE }}"
-          if [ "$pre_release" == "true" ]; then
-            changelog_file="CHANGELOG/testChangelog"
-            changelog_content=$(cat $changelog_file)
-          else
-            changelog_content=$(cat <<EOF
-          ## See [CHANGELOG-v0.x.0.md](CHANGELOG/CHANGELOG-v0.x.0.md) for details
-          ## 详细内容请查看 [CHANGELOG-v0.x.0-zh.md](CHANGELOG/CHANGELOG-v0.x.0-zh.md)
+          changelog_content=$(cat <<EOF
+                ## See [CHANGELOG-v0.x.0.md](CHANGELOG/CHANGELOG-v0.x.0.md) for details
+                ## 详细内容请查看 [CHANGELOG-v0.x.0-zh.md](CHANGELOG/CHANGELOG-v0.x.0-zh.md)
           EOF
-            )
-          fi
+          )
           echo "::set-output name=CHANGELOG_CONTENT::${changelog_content}"
-          # changelog_file="CHANGELOG/CHANGELOG-${new_tag}.md"
-          # changelog_file_zh="CHANGELOG/CHANGELOG-${new_tag}-zh.md"
-          # if [ -f "$changelog_file" ]; then
-          #   changelog_content=$(cat $changelog_file)
-          # else
-          #   echo "Changelog file not found: $changelog_file"
-          #   exit 1
-          # fi
-          # if [ -f "$changelog_file_zh" ]; then
-          #   changelog_content_zh=$(cat $changelog_file_zh)
-          # else
-          #   echo "Changelog file not found: $changelog_file_zh"
-          #   exit 1
-          # fi
-          # combined_changelog="${changelog_content}\n\n${changelog_content_zh}"
-          # echo "::set-output name=CHANGELOG_CONTENT::${combined_changelog}"
 
       - name: create release
         run: |
@@ -111,7 +89,7 @@ jobs:
             gh release create "$release_tag" \
               --target main \
               --title "$release_tag" \
-              --notes "$changelog_content" \
+              --generate-notes \
               --prerelease
           else
             gh release create "$release_tag" \
