@@ -71,8 +71,10 @@ jobs:
       - name: read changelog content
         id: read_changelog
         run: |
-          changelog_content="## See [CHANGELOG-v0.x.0.md](CHANGELOG/CHANGELOG-v0.x.0.md) for details
-                             ## 详细内容请查看 [CHANGELOG-v0.x.0-zh.md](CHANGELOG/CHANGELOG-v0.x.0-zh.md)"
+          changelog_content = """
+          ## See [CHANGELOG-v0.x.0.md](CHANGELOG/CHANGELOG-v0.x.0.md) for details
+          ## 详细内容请查看 [CHANGELOG-v0.x.0-zh.md](CHANGELOG/CHANGELOG-v0.x.0-zh.md)
+          """
           echo "::set-output name=CHANGELOG_CONTENT::${changelog_content}"
 
       - name: create release
