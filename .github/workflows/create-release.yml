@@ -21,7 +21,34 @@ jobs:
         run: | 
           git fetch --tags
           latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
-          echo "NEW_TAG=${latest_tag}" >> "$GITHUB_ENV"
+          echo "::set-output name=LATEST_TAG::${latest_tag}"
+        env:
+          GITHUB_ENV: ${{ env.GITHUB_ENV }}
+      - name: set version
+        id: set_version_auto
+        run: |
+          current_tag="${{ steps.get_latest_tag.outputs.LATEST_TAG }}"
+          current_tag=${current_tag#v}
+          if [[ "$current_tag" == *"-rc1" ]]; then
+            current_tag=${current_tag%-rc1}
+          fi
+          echo "Current tag: ${current_tag}"
+          IFS='.' read -r x y z <<< "$current_tag"
+          y=$((y + 1))
+          # day_of_week=$(date +%u)
+          # if [ "$day_of_week" -eq 1 ]; then
+          #   new_tag="v${x}.${y}.${z}"
+          # else
+          #   new_tag="v${x}.${y}.${z}-rc1"
+          # fi
+          minute=$(( $(date +%M) % 10 ))
+          if [ "$minute" -ge 5 ]; then
+            new_tag="v${x}.${y}.${z}-rc1"
+          else
+            new_tag="v${x}.${y}.${z}"
+          fi
+          echo "NEW_TAG=${new_tag}" >> "$GITHUB_ENV"
+          echo ${new_tag}
         env:
           GITHUB_ENV: ${{ env.GITHUB_ENV }}
       
