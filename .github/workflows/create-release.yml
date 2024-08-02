@@ -85,6 +85,7 @@ jobs:
           changelog_content= ${{ steps.read_changelog.outputs.CHANGELOG_CONTENT }}
           echo "${changelog_content}"
           pre_release="${{ steps.determine_pre_release.outputs.PRE_RELEASE }}"
+          echo "${pre_release}"
           if [ "$pre_release" == "true" ]; then
             gh release create "$release_tag" \
               --target main \
