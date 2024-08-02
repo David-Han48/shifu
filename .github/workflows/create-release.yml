@@ -15,12 +15,19 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+      - name: get latest tag
+        id: get_latest_tag
+        run: | 
+          git fetch --tags
+          latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
+          echo "::set-output name=LATEST_TAG::${latest_tag}"
+        env:
+          GITHUB_ENV: ${{ env.GITHUB_ENV }}
       - name: set version
         id: set_version_auto
         run: |
-          git fetch --tags
-          latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
-          current_tag="${{ latest_tag }}"
+          current_tag="${{ steps.get_latest_tag.outputs.LATEST_TAG }}"
           current_tag=${current_tag#v}
           if [[ "$current_tag" == *"-rc1" ]]; then
             current_tag=${current_tag%-rc1}
