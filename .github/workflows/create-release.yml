@@ -68,18 +68,12 @@ jobs:
             echo "::set-output name=PRE_RELEASE::false"
           fi
 
-      - name: read changelog content
-        id: read_changelog
-        run: |
-          changelog_content="""## See [CHANGELOG-v0.x.0.md](CHANGELOG/CHANGELOG-v0.x.0.md) for details
-          ## 详细内容请查看 [CHANGELOG-v0.x.0-zh.md](CHANGELOG/CHANGELOG-v0.x.0-zh.md)"""
-          echo "::set-output name=CHANGELOG_CONTENT::${changelog_content}"
-
       - name: create release
         run: |
           release_tag="${{ env.NEW_TAG }}"
           echo "${release_tag}"
-          changelog_content= ${{ steps.read_changelog.outputs.CHANGELOG_CONTENT }}
+          changelog_content="""## See [CHANGELOG-v0.x.0.md](CHANGELOG/CHANGELOG-v0.x.0.md) for details
+          ## 详细内容请查看 [CHANGELOG-v0.x.0-zh.md](CHANGELOG/CHANGELOG-v0.x.0-zh.md)"""
           echo "${changelog_content}"
           pre_release="${{ steps.determine_pre_release.outputs.PRE_RELEASE }}"
           echo "${pre_release}"
