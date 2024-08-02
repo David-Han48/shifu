@@ -43,9 +43,9 @@ jobs:
           # fi
           minute=$(( $(date +%M) % 10 ))
           if [ "$minute" -ge 5 ]; then
-            new_tag="v${x}.${y}.${z}"
-          else
             new_tag="v${x}.${y}.${z}-rc1"
+          else
+            new_tag="v${x}.${y}.${z}"
           fi
           echo "NEW_TAG=${new_tag}" >> "$GITHUB_ENV"
           echo ${new_tag}
