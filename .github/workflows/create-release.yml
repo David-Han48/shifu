@@ -104,7 +104,7 @@ jobs:
         run: |
           release_tag="${{ env.NEW_TAG }}"
           echo "${release_tag}"
-          changelog_content="abc"
+          changelog_content= ${{ steps.read_changelog.outputs.CHANGELOG_CONTENT }}
           echo "${changelog_content}"
           pre_release="${{ steps.determine_pre_release.outputs.PRE_RELEASE }}"
           if [ "$pre_release" == "true" ]; then
